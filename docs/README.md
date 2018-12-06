@@ -1,7 +1,8 @@
-> 这是YS同学的rehooker-schema-form库，闻到有先后，向大牛虚心学习。就以完成这个库的文档开始吧。从多个维度来看这个库，当然第一步是按文件功能实现逐个看。后面熟练后将会切换角度。
+> 这是YS同学的rehooker-schema-form库，这个库的作用是
 
 # 目录
-1. 项目结构(## 项目结构)
+1. 项目结构(##项目结构)
+2. 为什么写这个库(##Why)
 
 ## 项目结构
 ```
@@ -88,4 +89,86 @@
 ├─tsconfig.json                       # ts配置文件
 ├─yarn.lock                           # yarn版本固定文件
 
+```
+
+## 为什么写这个库
+这个库思想来自redux-form，但不在依赖于redux-form。提供每个表单域（field）的状态在运行时能够被表单的值改变。比如，基于另一个field的值隐藏或展示一个表单域。
+
+## 如何使用
+- 接受一个自创的`schema`格式用于生成form表单
+- 表单的状态由`rehooker`管理
+- 预定义了一些ant design风格的小组件，因此你不需要每个表单都要去写一遍：
+  - number
+  - text
+  - password
+  - email
+  - date
+  - file
+  - checkbox
+  - select
+  - autocomplete
+  - autocomplete-async
+  - autocomplete-text
+  - array
+  - group
+- 你能通过`addType`方法添加更多的小组件
+- 你可以用`setButtons` 和 `injectSubmittable` 方法使用自定义按钮
+
+具体代码演示：
+```js
+import {SchemaForm,injectSubmittable} from "rehooker-schema-form"
+import "rehooker-schema-form/src/ant-design"
+
+const schema = [
+    {
+        key:"name",
+        label:"Name",
+        type:"text",
+        ...others// other props are passed to underlying component, such as required and multiLine
+    },{
+        key:"password",
+        label:"Password"
+        type:"password"
+    },{
+        key:"fieldWithState",
+        label:"this field changed when Name changed",
+        type:"text",
+        listens:[
+            {
+                to:()=>["Company Name"],
+                then:([value])=>{
+                    if(value === 'Some Company')
+                        return {
+                            label:"Name Illegal"
+                        }
+                    else
+                        return {
+                            label:"this field changed when Name changed"
+                        }
+                }
+            }
+        ]
+    }
+]
+
+function FormWithDefaultButtons(){ //Default buttons are chinese
+    return <SchemaForm
+        form="my-form" 
+        schema={schema}
+        {...others}
+    />
+}
+
+function FormWithCustomButtons(){
+    return <div>
+        <SchemaForm
+            form="foo1" 
+            schema={schema}
+            noButton
+            {...others}
+        />
+        <CustomSubmitButton>Submit Form</CustomSubmitButton>
+        <CustomResetButton>Reset Fields</CustomResetButton>
+    </div>
+}
 ```
