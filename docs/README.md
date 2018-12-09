@@ -18,11 +18,11 @@
 ├─styles
 |   └antd-components.css
 ├─src                                 # 项目目录   
-|  ├─constants.ts                     ## 
+|  ├─constants.ts                     ## 存放常量函数
 |  ├─field-array.tsx
 |  ├─field.tsx
-|  ├─form.tsx
-|  ├─index.ts
+|  ├─form.tsx                         # 
+|  ├─index.ts                         # 将模块统一导出
 |  ├─inject-submittable.tsx
 |  ├─mutations.ts
 |  ├─resolve-maybe-promise.tsx

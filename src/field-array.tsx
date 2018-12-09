@@ -8,6 +8,11 @@ type FieldArrayProps = WidgetProps & {
     children:(keys:string[], add:()=>void, remove:(key:string)=>void, renderChild:(key:string)=>React.ReactNode)=>React.ReactNode
 }
 
+/**
+ * FieldArray 
+ * @param {FieldArrayProps} props 
+ * @return 
+ * */
 export function FieldArray(props:FieldArrayProps){
     const add = React.useMemo(()=>()=>{
         props.form.next(addArrayItem(props.schema,props.keyPath,props.value))
